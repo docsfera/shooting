@@ -10,6 +10,10 @@
     "heroku-postbuild": "node app.js",
     "production": "set NODE_EVN=production&& node app.js",
   },
+  "dependencies": {
+    
+  },
+
   "author": "",
   "license": "ISC",
 }
