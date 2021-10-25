@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Setting The Scene</title>
+  <style>
+    body{
+      background:white;
+      margin:0;
+      padding:0;
+      overflow:hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="threejs"></div>
+  <div style="width: 100px; height: 100px; background-color: black; position: absolute;
+    right: 0;
+    top: 0; opacity: 30%" id="fff"></div>
+
+ <!--  <script type="text/javascript" src="https://webglfundamentals.org/webgl/resources/m4.js"></script>  
+  
+  
+  <script type="text/javascript" src="js/coffee-script.js"></script>
+  <script type="text/javascript" src="js/ThreeBSP.js"></script>
+  <script type="text/coffeescript" src="js/ThreeBSP.coffee"></script> -->
+  <script type="module" src='jss/three.js'></script>
+     <script type="module" src="jss/Projector.js"></script>
+   <!-- <script type="text/javascript"  src="jss/Raycaster.js"></script>
+<script type="text/javascript" src="three/examples/jsm/controls/PointerLockControls.js"></script> -->
+      <!-- <script type="text/javascript" src='myjs/main.js'></script> -->
+      <script type="module">
+        import * as THREE from './three/build/three.module.js';
+import { PointerLockControls } from './three/examples/jsm/controls/PointerLockControls.js';
+// import {Projector} from './jss/Projector.js';
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const renderer = new THREE.WebGLRenderer();
+let keyBoard = [];
+let vector;
+renderer.setSize( window.innerWidth, window.innerHeight );
+//var projector = new THREE.Projector();
+document.body.appendChild( renderer.domElement );
+
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe : true } );
+      const cube = new THREE.Mesh( geometry, material );
+      scene.add( cube );
+      
+      var moveForward = false;
+      var moveBackward = false;
+      var moveLeft = false;
+      var moveRight = false;
+      var canJump = false;
+
+      const meshFloor = new THREE.Mesh(
+        new THREE.PlaneGeometry(10,10,20,20),
+        material
+      )
+
+      var prevTime = performance.now();
+      var velocity = new THREE.Vector3();
+
+      meshFloor.rotation.x = Math.PI / 2;
+      scene.add( meshFloor );
+      let controls = new PointerLockControls( camera, document.body );
+      scene.add( controls.getObject() );
+
+var onKeyDown = function ( event ) {
+
+          switch ( event.keyCode ) {
+
+            case 38: // up
+            case 87: // w
+              moveForward = true;
+              break;
+
+            case 37: // left
+            case 65: // a
+              moveLeft = true;
+              break;
+
+            case 40: // down
+            case 83: // s
+              moveBackward = true;
+              break;
+
+            case 39: // right
+            case 68: // d
+              moveRight = true;
+              break;
+
+            case 32: // space
+              if ( canJump === true ) velocity.y += 350;
+              canJump = false;
+              break;
+
+          }
+
+        };
+      var onKeyUp = function ( event ) {
+
+          switch ( event.keyCode ) {
+
+            case 38: // up
+            case 87: // w
+              moveForward = false;
+              break;
+
+            case 37: // left
+            case 65: // a
+              moveLeft = false;
+              break;
+
+            case 40: // down
+            case 83: // s
+              moveBackward = false;
+              break;
+
+            case 39: // right
+            case 68: // d
+              moveRight = false;
+              console.log('d')
+              break;
+
+          }
+
+        };
+        document.addEventListener( 'keydown', onKeyDown, false );
+        document.addEventListener( 'keyup', onKeyUp, false );
+
+        
+// document.querySelector('html').addEventListener('mousemove', event => {
+  
+//  vector = new THREE.Vector3(( event.clientX / window.innerWidth ) * 2 - 1,- ( event.clientY / window.innerHeight ) * 2 + 1,0.5 );
+//  projector.unprojectVector( vector, camera );
+//  camera.lookAt(vector)
+
+// })
+
+      camera.position.set(0, 0.7, 5);
+      //let controls = new PointerLockControls( camera, document.body );
+      //console.log(vector)
+
+
+
+
+      const animate = function () {
+        requestAnimationFrame( animate );
+
+        var time = performance.now();
+        var delta = ( time - prevTime ) / 1000;
+        controls.moveRight( - velocity.x * delta );
+          controls.moveForward( - velocity.z * delta );
+
+          controls.getObject().position.y += ( velocity.y * delta ); // new behavior
+
+          if ( controls.getObject().position.y < 10 ) {
+
+            velocity.y = 0;
+            controls.getObject().position.y = 10;
+
+            canJump = true;
+
+          }
+
+          prevTime = time;
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+// if(keyBoard[83]){
+//  camera.position.x += Math.sin(camera.rotation.y) * 0.1;
+//  camera.position.z += Math.cos(camera.rotation.y) * 0.1;
+// }
+// if(keyBoard[87]){
+//  camera.position.x -= Math.sin(camera.rotation.y) * 0.1;
+//  camera.position.z -= Math.cos(camera.rotation.y) * 0.1;
+// }
+// if(keyBoard[65]){
+//  camera.position.x += Math.sin(camera.rotation.y - Math.PI / 2) * 0.1;
+//  camera.position.z += -Math.cos(camera.rotation.y - Math.PI / 2) * 0.1;
+// }
+// if(keyBoard[68]){
+//  camera.position.x += Math.sin(camera.rotation.y + Math.PI / 2) * 0.1;
+//  camera.position.z += -Math.cos(camera.rotation.y + Math.PI / 2) * 0.1;
+// }
+
+//        if(keyBoard[37]){
+//          camera.rotation.y -= Math.PI * 0.01; // left
+//        }
+//        if(keyBoard[39]){
+//          camera.rotation.y += Math.PI * 0.01; // right
+//        }
+
+        renderer.render( scene, camera );
+      };
+
+      animate();
+// function keyDown(event){
+//  keyBoard[event.keyCode] = true;
+// }
+// function keyUp(event){
+//  keyBoard[event.keyCode] = false;
+// }
+
+// window.addEventListener('keydown', keyDown);
+// window.addEventListener('keyup', keyUp);
+
+      </script>
+    
+   
+  
+</body>
+</html>
