@@ -8,10 +8,10 @@
     "build": "node app.js",
     "install-client": "cd client && npm install",
     "heroku-postbuild": "node app.js",
-    "production": "set NODE_EVN=production&& node app.js",
+    "production": "set NODE_EVN=production&& node app.js"
 
   },
-  
+
   "dependencies": {
 
   },
