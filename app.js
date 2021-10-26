@@ -3,9 +3,15 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+const PORT = process.env.PORT || 5002
+
 app.use(express.static(__dirname));
 app.get('/',function(req, res) {
     res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/about',function(req, res) {
+    res.end('<h1> About Page </h1>');
 });
 
 guns = {}
@@ -46,6 +52,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(5000, function(){
-  console.log('listening on *:5000');
+http.listen(PORT, function(){
+  console.log(`listening on ${PORT}`);
 });
