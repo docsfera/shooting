@@ -9,14 +9,11 @@
     "install-client": "cd client && npm install",
     "heroku-postbuild": "node app.js",
     "production": "set NODE_EVN=production&& node app.js"
-
   },
-
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "4.3.1"
   },
-
   "author": "",
   "license": "ISC"
 }
